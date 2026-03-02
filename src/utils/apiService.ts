@@ -44,16 +44,23 @@ class ElevenLabsApiService {
   // Using direct fetch instead of SDK to avoid blocking issues
 
   async createAgent(request: CreateAgentRequest): Promise<CreateAgentResponse> {
-    console.log('Creating agent via Supabase Edge Function:', request);
+    console.log('Creating agent via direct API call:', request);
 
-    const url = `${ENV.SUPABASE_URL}/functions/v1/create-elevenlabs-agent`;
-    const response = await fetchWithAuth(url, {
+    // Get the API key directly
+    const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY || '';
+
+    if (!apiKey) {
+      throw new Error('ElevenLabs API key is not configured');
+    }
+
+    const response = await fetch('https://api.elevenlabs.io/v1/convai/agents/create', {
       method: 'POST',
       headers: {
+        'xi-api-key': apiKey,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(request),
-    }, 90000); // 90s timeout for ElevenLabs (can be slow)
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -67,16 +74,19 @@ class ElevenLabsApiService {
   }
 
   async initiateCall(request: InitiateCallRequest): Promise<{ success: boolean; conversationId?: string }> {
-    console.log('Initiating call via Supabase Edge Function:', request);
+    console.log('Initiating call via direct API:', request);
 
-    const url = `${ENV.SUPABASE_URL}/functions/v1/initiate-scheduled-call`;
-    const response = await fetchWithAuth(url, {
+    const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY || '';
+    if (!apiKey) throw new Error('ElevenLabs API key is not configured');
+
+    const response = await fetch('https://api.elevenlabs.io/v1/convai/phone/call', {
       method: 'POST',
       headers: {
+        'xi-api-key': apiKey,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(request),
-    }, 30000); // 30s timeout
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -85,24 +95,29 @@ class ElevenLabsApiService {
     }
 
     const data = await response.json();
-    console.log('Call initiated successfully:', data);
     return data;
   }
 
   async textToSpeech(text: string, voiceId?: string): Promise<{ audioContent: string }> {
-    console.log('Converting text to speech via Supabase Edge Function');
+    console.log('Converting text to speech via direct API');
 
-    const url = `${ENV.SUPABASE_URL}/functions/v1/text-to-speech`;
-    const response = await fetchWithAuth(url, {
+    const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY || '';
+    if (!apiKey) throw new Error('ElevenLabs API key is not configured');
+
+    const vId = voiceId || '21m00Tcm4TlvDq8ikWAM';
+
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vId}`, {
       method: 'POST',
       headers: {
+        'xi-api-key': apiKey,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         text,
-        voice: voiceId || '21m00Tcm4TlvDq8ikWAM'
-      }),
-    }, 30000); // 30s timeout
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -110,7 +125,10 @@ class ElevenLabsApiService {
       throw new Error(`Failed to generate speech: ${errorText}`);
     }
 
-    return response.json();
+    const arrayBuffer = await response.arrayBuffer();
+    // Use btoa for browser-compatible base64 encoding
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    return { audioContent: base64 };
   }
 }
 
