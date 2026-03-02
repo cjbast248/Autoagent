@@ -459,7 +459,7 @@ const Dashboard = () => {
               {/* Right Side Actions */}
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => toast({ title: "În curând", description: "Pagina cu noutăți va fi disponibilă în curând." })}
+                  onClick={() => toast({ title: "Coming Soon", description: "The news page will be available soon." })}
                   className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 hover:text-black transition"
                 >
                   <span className="w-2 h-2 rounded-full bg-blue-500"></span>

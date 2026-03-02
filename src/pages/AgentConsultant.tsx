@@ -140,18 +140,18 @@ const AgentConsultant: React.FC = () => {
 
   const getSystemPrompt = () => {
     if (agentType === 'blank') {
-      return 'Ești un asistent virtual prietenos și profesionist. Ajută utilizatorii cu întrebările lor și oferă răspunsuri clare și utile.';
+      return 'You are a friendly and professional virtual assistant. Help users with their questions and provide clear and useful answers.';
     }
     if (agentType === 'website') {
       const urlPart = websiteUrl.trim() ? ` pentru ${websiteUrl.trim()}` : '';
-      return `Bună ziua! Sunt asistentul virtual${urlPart}. Cu ce vă pot ajuta astăzi? Sunt aici să răspund la întrebările dumneavoastră și să vă ofer suport.`;
+      return `Hello! I am the virtual assistant${urlPart}. How can I help you today? I am here to answer your questions and provide support.`;
     }
     if (agentType === 'business') {
       const industry = INDUSTRIES.find(i => i.id === selectedIndustry)?.label || '';
       const useCase = (USE_CASES[selectedIndustry || ''] || USE_CASES.default).find(u => u.id === selectedUseCase)?.label || '';
-      return `Ești un asistent ${useCase} pentru o afacere din domeniul ${industry}. Ajută clienții cu întrebările lor în mod profesionist și prietenos.`;
+      return `You are a ${useCase} assistant for a business in the ${industry} field. Help customers with their questions in a professional and friendly manner.`;
     }
-    return 'Ești un asistent virtual prietenos și profesionist. Ajută utilizatorii cu întrebările lor.';
+    return 'You are a friendly and professional virtual assistant. Help users with their questions and provide clear and useful answers.';
   };
 
 
@@ -221,7 +221,7 @@ const AgentConsultant: React.FC = () => {
 
   const handleCreateAgentClick = async () => {
     setIsProcessing(true);
-    setProcessingStep('Se creează agentul...');
+    setProcessingStep('Creating agent...');
 
     try {
       // Skip website analysis - use instant default prompt
@@ -229,7 +229,7 @@ const AgentConsultant: React.FC = () => {
       await handleCreateAgent();
     } catch (error) {
       console.error('Error creating agent:', error);
-      toast.error('A apărut o eroare la crearea agentului');
+      toast.error('An error occurred while creating the agent');
     } finally {
       setIsProcessing(false);
       setProcessingStep('');
@@ -610,7 +610,7 @@ const AgentConsultant: React.FC = () => {
                   disabled={isLoading}
                 />
                 <p className="text-[10px] text-zinc-400 mt-2">
-                  Poți personaliza promptul după creare în pagina de editare
+                  You can customize the prompt after creation in the edit page
                 </p>
               </div>
             )}

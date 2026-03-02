@@ -308,7 +308,7 @@ export function AppSidebar() {
             <SectionLabel>{t('sidebar.integrations')}</SectionLabel>
             <div className="px-2 space-y-0.5">
               <MenuItem to="/account/integrations" icon={Zap} label={t('sidebar.integrationsMenu')} />
-              <MenuItem to="/account/chat-widget" icon={MessageSquare} label="Chat Widget" />
+              <MenuItem to="/account/chat-widget" icon={MessageSquare} label={t('sidebar.chatWidget')} />
               <MenuItem to="/account/calendar" icon={CalendarDays} label={t('sidebar.calendar')} />
             </div>
           </div>
@@ -459,7 +459,7 @@ export function AppSidebar() {
                   </Link>
 
                   <button
-                    onClick={() => toast.info('În curând', { description: 'Pagina cu noutăți va fi disponibilă în curând.' })}
+                    onClick={() => toast.info('Coming Soon', { description: 'The news page will be available soon.' })}
                     className="flex items-center gap-2 text-zinc-500 hover:text-zinc-700 transition flex-1 justify-center"
                   >
                     <Megaphone className="w-4 h-4" />

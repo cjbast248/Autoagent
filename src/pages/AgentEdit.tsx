@@ -457,16 +457,16 @@ const AgentEdit = () => {
         } catch (kbError) {
           console.error('Error processing knowledge base:', kbError);
           toast({
-            title: "Atenție",
-            description: "Nu s-a putut procesa baza de cunoștințe a agentului",
+            title: "Attention",
+            description: "Could not process agent's knowledge base",
             variant: "destructive"
           });
         }
       } catch (error) {
         console.error('Error fetching agent:', error);
         toast({
-          title: "Eroare",
-          description: "Nu s-a putut încărca informațiile agentului",
+          title: "Error",
+          description: "Could not load agent information",
           variant: "destructive"
         });
       } finally {
@@ -591,15 +591,15 @@ const AgentEdit = () => {
       setOriginalMultilingualMessages(JSON.parse(JSON.stringify(multilingualMessages)));
       setHasChanges(false);
       toast({
-        title: "Succes!",
-        description: "Agentul a fost salvat cu succes."
+        title: "Success!",
+        description: "Agent saved successfully."
       });
     } catch (error: any) {
       console.error('Error saving agent:', error);
       console.error('Error details:', error?.message, error?.details);
       toast({
-        title: "Eroare",
-        description: error?.message || error?.details || "Nu s-a putut salva agentul",
+        title: "Error",
+        description: error?.message || error?.details || "Could not save agent",
         variant: "destructive"
       });
     } finally {
@@ -616,8 +616,8 @@ const AgentEdit = () => {
 
     if (!allowedTypes.includes(fileExtension)) {
       toast({
-        title: "Tip de fișier nesuportat",
-        description: `Tipurile suportate sunt: ${allowedTypes.join(', ')}`,
+        title: "Unsupported file type",
+        description: `Supported types are: ${allowedTypes.join(', ')}`,
         variant: "destructive",
       });
       return;
@@ -626,8 +626,8 @@ const AgentEdit = () => {
     // Validate file size (max 21MB, same as ElevenLabs)
     if (file.size > 21 * 1024 * 1024) {
       toast({
-        title: "Fișier prea mare",
-        description: "Dimensiunea maximă permisă este 21MB",
+        title: "File too large",
+        description: "Maximum allowed size is 21MB",
         variant: "destructive",
       });
       return;
@@ -641,8 +641,8 @@ const AgentEdit = () => {
   const addManualDocument = async () => {
     if (!newDocName.trim() || !newDocContent.trim()) {
       toast({
-        title: "Eroare",
-        description: "Te rog completează numele și conținutul documentului.",
+        title: "Error",
+        description: "Please fill in the name and content of the document.",
         variant: "destructive"
       });
       return;
@@ -663,8 +663,8 @@ const AgentEdit = () => {
   const handleAddExistingDocument = () => {
     if (!selectedExistingDocId) {
       toast({
-        title: "Eroare",
-        description: "Te rog selectează un document.",
+        title: "Error",
+        description: "Please select a document.",
         variant: "destructive"
       });
       return;
@@ -677,8 +677,8 @@ const AgentEdit = () => {
       const url = window.location.href;
       navigator.clipboard.writeText(url);
       toast({
-        title: 'Link copiat',
-        description: 'URL-ul către agent a fost copiat.'
+        title: 'Link copied',
+        description: 'The URL to the agent has been copied.'
       });
     } catch (_) { }
   };
@@ -1101,7 +1101,7 @@ const AgentEdit = () => {
                   </div>
                   <div className="text-left">
                     <div className="text-sm font-bold text-zinc-900">
-                      {LANGUAGES.find(l => l.value === agentData.conversation_config?.agent?.language)?.label || 'Română'}
+                      {LANGUAGES.find(l => l.value === agentData.conversation_config?.agent?.language)?.label || 'English'}
                     </div>
                     <span className="text-[9px] font-bold text-zinc-400 bg-zinc-50 px-1.5 py-0.5 rounded border border-zinc-100">DEFAULT</span>
                   </div>
@@ -2016,7 +2016,7 @@ const AgentEdit = () => {
                   }
                 } : prev);
               }}
-              placeholder="Bună ziua! Cum vă pot ajuta astăzi?"
+              placeholder="Hello! How can I help you today?"
               className="flex-1 text-sm text-zinc-700 bg-transparent border-0 p-0 resize-none focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 overflow-auto placeholder:text-zinc-400"
             />
           </div>

@@ -62,7 +62,7 @@ export default function WorkflowList() {
     if (isCreating) return; // Prevent multiple clicks
     setIsCreating(true);
     try {
-      const projectId = await saveProject('Workflow Nou', [], []);
+      const projectId = await saveProject('New Workflow', [], []);
       if (projectId) {
         navigate(`/account/workflow/${projectId}`);
       }
@@ -133,7 +133,7 @@ export default function WorkflowList() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    toast.success(`Workflow exportat!`);
+    toast.success(`Workflow exported!`);
   };
 
   const handleImportClick = () => {
@@ -151,7 +151,7 @@ export default function WorkflowList() {
         const importedData = JSON.parse(content);
 
         if (!importedData.nodes || !Array.isArray(importedData.nodes)) {
-          throw new Error('Fișierul nu conține noduri valide');
+          throw new Error('File does not contain valid nodes');
         }
 
         const idMapping: Record<string, string> = {};
@@ -167,18 +167,17 @@ export default function WorkflowList() {
           from: idMapping[conn.from] || conn.from,
           to: idMapping[conn.to] || conn.to,
         }));
-
         const projectName = importedData.name
-          ? `${importedData.name} (Importat)`
-          : `Workflow Importat`;
+          ? `${importedData.name} (Imported)`
+          : `Imported Workflow`;
 
         const projectId = await saveProject(projectName, newNodes, newConnections);
         if (projectId) {
-          toast.success('Workflow importat cu succes!');
+          toast.success('Workflow imported successfully!');
         }
       } catch (error: any) {
         console.error('Import error:', error);
-        toast.error(`Eroare la import: ${error.message || 'Fișier invalid'}`);
+        toast.error(`Import error: ${error.message || 'Invalid file'}`);
       }
     };
     reader.readAsText(file);
@@ -285,7 +284,7 @@ export default function WorkflowList() {
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                 <input
                   type="text"
-                  placeholder="Caută workflows..."
+                  placeholder="Search workflows..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-80 pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition placeholder:text-zinc-400"
@@ -300,7 +299,7 @@ export default function WorkflowList() {
                 className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-zinc-800 transition shadow-lg shadow-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Plus className="w-4 h-4" />
-                {isCreating ? 'Se creează...' : 'Creează Workflow'}
+                {isCreating ? 'Creating...' : 'Create Workflow'}
               </button>
             </div>
           </div>
@@ -337,7 +336,7 @@ export default function WorkflowList() {
               <Plus className="w-4 h-4" />
             </div>
             <span className="text-sm font-bold text-zinc-500 group-hover:text-black transition">
-              {isCreating ? 'Se creează...' : 'Start from scratch'}
+              {isCreating ? 'Creating...' : 'Start from scratch'}
             </span>
             <span className="text-xs text-zinc-400 ml-2">or select a template below</span>
           </div>
@@ -403,7 +402,7 @@ export default function WorkflowList() {
                     className="inline-flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-zinc-800 transition shadow-lg shadow-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Plus className="w-4 h-4" />
-                    {isCreating ? 'Se creează...' : 'Creează Workflow'}
+                    {isCreating ? 'Creating...' : 'Create Workflow'}
                   </button>
                 )}
               </div>

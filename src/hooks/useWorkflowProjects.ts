@@ -235,8 +235,6 @@ export const useWorkflowProjects = () => {
             nodes,
             connections,
             status: 'draft',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
           }),
         }, 15000);
 

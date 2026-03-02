@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import { useTranslation } from "react-i18next";
 import { AdminRoute } from "./components/secure/AdminRoute";
@@ -211,7 +211,7 @@ function AppWithWelcome() {
 
 function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <LanguageProvider>
           <ThemeProvider>
@@ -229,7 +229,7 @@ function App() {
           </ThemeProvider>
         </LanguageProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 

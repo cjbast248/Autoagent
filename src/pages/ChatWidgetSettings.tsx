@@ -109,13 +109,13 @@ const ChatWidgetSettings = () => {
   // Checkout & Cart settings
   const [cartEnabled, setCartEnabled] = useState(true);
   const [checkoutFields, setCheckoutFields] = useState<CheckoutField[]>([
-    { id: 'name', label: 'Nume', type: 'text', required: false, enabled: true, placeholder: 'Introduceți numele' },
-    { id: 'phone', label: 'Telefon', type: 'tel', required: true, enabled: true, placeholder: '+373 xxx xxx xxx' },
-    { id: 'address', label: 'Adresa', type: 'textarea', required: false, enabled: true, placeholder: 'Introduceți adresa de livrare' },
-    { id: 'notes', label: 'Note', type: 'textarea', required: false, enabled: false, placeholder: 'Note suplimentare (opțional)' }
+    { id: 'name', label: 'Name', type: 'text', required: false, enabled: true, placeholder: 'Enter your name' },
+    { id: 'phone', label: 'Phone', type: 'tel', required: true, enabled: true, placeholder: '+1 XXX XXX XXXX' },
+    { id: 'address', label: 'Address', type: 'textarea', required: false, enabled: true, placeholder: 'Enter your delivery address' },
+    { id: 'notes', label: 'Notes', type: 'textarea', required: false, enabled: false, placeholder: 'Additional notes (optional)' }
   ]);
-  const [checkoutButtonText, setCheckoutButtonText] = useState('Finalizează comanda');
-  const [checkoutSuccessMessage, setCheckoutSuccessMessage] = useState('Mulțumim pentru comandă! Vă vom contacta în curând.');
+  const [checkoutButtonText, setCheckoutButtonText] = useState('Complete Order');
+  const [checkoutSuccessMessage, setCheckoutSuccessMessage] = useState('Thank you for your order! We will contact you shortly.');
 
   // Voice settings state
   const [voiceEnabled, setVoiceEnabled] = useState(false);
@@ -799,7 +799,10 @@ const ChatWidgetSettings = () => {
         .order('created_at', { ascending: true })
         .limit(1);
 
+      console.log('🔍 [loadWidgetConfig] Fetch result:', { count: existingConfigs?.length, error: fetchError });
+
       if (fetchError) {
+        console.error('❌ [loadWidgetConfig] Fetch error:', fetchError);
         throw fetchError;
       }
 
@@ -842,8 +845,8 @@ const ChatWidgetSettings = () => {
         if ((existingConfig as any).checkout_fields) {
           setCheckoutFields((existingConfig as any).checkout_fields);
         }
-        setCheckoutButtonText((existingConfig as any).checkout_button_text || 'Finalizează comanda');
-        setCheckoutSuccessMessage((existingConfig as any).checkout_success_message || 'Mulțumim pentru comandă! Vă vom contacta în curând.');
+        setCheckoutButtonText((existingConfig as any).checkout_button_text || 'Complete Order');
+        setCheckoutSuccessMessage((existingConfig as any).checkout_success_message || 'Thank you for your order! We will contact you shortly.');
         setWidgetSettings(prev => ({
           ...prev,
           primaryColor: existingConfig.primary_color || prev.primaryColor,
@@ -866,14 +869,18 @@ const ChatWidgetSettings = () => {
           soundEnabled: (existingConfig as any).sound_enabled ?? prev.soundEnabled,
         }));
       } else {
-        const { data: newConfig, error: createError } = await supabase
+        // CREATE NEW WIDGET IF NONE EXISTS
+        console.log('✨ [loadWidgetConfig] No widget found, creating default for user:', user.id);
+        const newWidgetId = crypto.randomUUID();
+        const { data: newConfigs, error: createError } = await supabase
           .from('chat_widget_configs')
           .insert({
             user_id: user.id,
+            widget_id: newWidgetId,
             name: 'My Chat Widget',
             system_prompt: systemPrompt,
             welcome_message: widgetSettings.welcomeMessage,
-            assistant_name: 'Asistent AI',
+            assistant_name: 'AI Assistant',
             primary_color: widgetSettings.primaryColor,
             secondary_color: widgetSettings.secondaryColor,
             text_color: widgetSettings.textColor,
@@ -893,17 +900,21 @@ const ChatWidgetSettings = () => {
             show_powered_by: widgetSettings.showPoweredBy,
             sound_enabled: widgetSettings.soundEnabled,
           } as any)
-          .select()
-          .single();
+          .select(); // Removed .single() to handle potential array return, though insert usually returns single.
 
-        if (createError) throw createError;
-        console.log('✅ Widget created:', newConfig);
+        if (createError) {
+          console.error('❌ [loadWidgetConfig] Create error:', createError);
+          throw createError;
+        }
+
+        const newConfig = newConfigs && (newConfigs as any[]).length > 0 ? newConfigs[0] : null;
+        console.log('✅ [loadWidgetConfig] Widget created:', newConfig);
         setWidgetConfig(newConfig as WidgetConfig);
-        toast.success('Widget creat cu succes!');
+        toast.success('Widget created successfully!');
       }
     } catch (error: any) {
       console.error('Error loading widget config:', error);
-      toast.error('Eroare la încărcarea configurației');
+      toast.error('Error loading widget configuration');
     } finally {
       setIsLoadingConfig(false);
     }
@@ -1588,8 +1599,8 @@ const ChatWidgetSettings = () => {
                                 setCheckoutFields(newFields);
                               }}
                               className={`text-xs px-2 py-1 rounded-lg transition-colors ${field.required
-                                  ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                                  : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
+                                ? 'bg-red-50 text-red-600 hover:bg-red-100'
+                                : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
                                 }`}
                             >
                               {field.required ? 'Obligatoriu' : 'Opțional'}
@@ -1604,8 +1615,8 @@ const ChatWidgetSettings = () => {
                               setCheckoutFields(newFields);
                             }}
                             className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${field.enabled
-                                ? 'bg-green-50 text-green-600 hover:bg-green-100'
-                                : 'bg-zinc-100 text-zinc-400 hover:bg-zinc-200'
+                              ? 'bg-green-50 text-green-600 hover:bg-green-100'
+                              : 'bg-zinc-100 text-zinc-400 hover:bg-zinc-200'
                               }`}
                           >
                             {field.enabled ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -1712,8 +1723,8 @@ const ChatWidgetSettings = () => {
                 <button
                   onClick={() => setPreviewMode('desktop')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${previewMode === 'desktop'
-                      ? 'bg-black text-white'
-                      : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100'
+                    ? 'bg-black text-white'
+                    : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100'
                     }`}
                 >
                   <Monitor className="w-3.5 h-3.5" />
@@ -1722,8 +1733,8 @@ const ChatWidgetSettings = () => {
                 <button
                   onClick={() => setPreviewMode('mobile')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${previewMode === 'mobile'
-                      ? 'bg-black text-white'
-                      : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100'
+                    ? 'bg-black text-white'
+                    : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100'
                     }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" />
@@ -1821,8 +1832,8 @@ const ChatWidgetSettings = () => {
                             key={conv.id}
                             onClick={() => setSelectedConversation(conv)}
                             className={`p-4 border-b border-zinc-100 cursor-pointer transition-all ${isSelected
-                                ? 'bg-zinc-100'
-                                : 'hover:bg-zinc-50'
+                              ? 'bg-zinc-100'
+                              : 'hover:bg-zinc-50'
                               }`}
                           >
                             <div className="flex items-center justify-between mb-1">
@@ -1874,8 +1885,8 @@ const ChatWidgetSettings = () => {
                             >
                               {/* Avatar */}
                               <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold ${msg.role === 'user'
-                                  ? 'bg-zinc-100 text-zinc-900 border border-zinc-200'
-                                  : 'bg-black text-white'
+                                ? 'bg-zinc-100 text-zinc-900 border border-zinc-200'
+                                : 'bg-black text-white'
                                 }`}>
                                 {msg.role === 'user' ? 'V' : 'K'}
                               </div>
@@ -1884,8 +1895,8 @@ const ChatWidgetSettings = () => {
                                 {/* Message Bubble */}
                                 <div
                                   className={`text-sm leading-relaxed ${msg.role === 'user'
-                                      ? 'bg-black text-white px-5 py-3 rounded-[20px] rounded-br-[4px] shadow-lg inline-block max-w-md'
-                                      : 'bg-white border border-zinc-200 px-5 py-4 rounded-[4px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px] shadow-sm max-w-2xl'
+                                    ? 'bg-black text-white px-5 py-3 rounded-[20px] rounded-br-[4px] shadow-lg inline-block max-w-md'
+                                    : 'bg-white border border-zinc-200 px-5 py-4 rounded-[4px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px] shadow-sm max-w-2xl'
                                     }`}
                                 >
                                   {msg.role === 'assistant' ? renderMessageContent(msg.content) : msg.content}
@@ -1993,8 +2004,8 @@ const ChatWidgetSettings = () => {
                         key={filter}
                         onClick={() => setLeadsFilter(filter)}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium ${leadsFilter === filter
-                            ? 'bg-black text-white'
-                            : 'text-zinc-500 hover:text-black hover:bg-zinc-100'
+                          ? 'bg-black text-white'
+                          : 'text-zinc-500 hover:text-black hover:bg-zinc-100'
                           }`}
                       >
                         {filter === 'all' ? 'Toate' :

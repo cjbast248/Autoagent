@@ -37,13 +37,13 @@ export const useAgentCreation = ({
     try {
       await navigator.clipboard.writeText(createdAgentId);
       toast({
-        title: "Copiat!",
+        title: "Copied!",
         description: MESSAGES.SUCCESS.CLIPBOARD_COPIED,
       });
     } catch (error) {
       console.error('Error copying to clipboard:', error);
       toast({
-        title: "Eroare",
+        title: "Error",
         description: MESSAGES.ERRORS.CLIPBOARD_COPY_FAILED,
         variant: "destructive",
       });
@@ -54,7 +54,7 @@ export const useAgentCreation = ({
   const handleCreateAgent = useCallback(async () => {
     if (!agentName.trim()) {
       toast({
-        title: "Eroare",
+        title: "Error",
         description: MESSAGES.ERRORS.MISSING_AGENT_NAME,
         variant: "destructive",
       });
@@ -63,8 +63,8 @@ export const useAgentCreation = ({
 
     if (agentName.trim().length > 255) {
       toast({
-        title: "Eroare",
-        description: "Numele agentului nu poate depăși 255 de caractere",
+        title: "Error",
+        description: "Agent name cannot exceed 255 characters",
         variant: "destructive",
       });
       return;
@@ -72,8 +72,8 @@ export const useAgentCreation = ({
 
     if (!user || !user.id) {
       toast({
-        title: "Eroare",
-        description: "Trebuie să fii autentificat pentru a crea un agent",
+        title: "Error",
+        description: "You must be logged in to create an agent",
         variant: "destructive",
       });
       return;
@@ -134,7 +134,7 @@ export const useAgentCreation = ({
             agent_id: response.agent_id,
             user_id: user.id,
             name: agentName,
-            description: `Agent consultant generat automat pentru ${websiteUrl}`,
+            description: `Auto-generated consultant agent for ${websiteUrl}`,
             system_prompt: promptText,
             voice_id: selectedVoice,
             voice_name: voiceName,
@@ -151,8 +151,8 @@ export const useAgentCreation = ({
       } catch (dbError: any) {
         console.error('Error saving agent to database:', dbError);
         toast({
-          title: "Atenție",
-          description: `Agentul a fost creat în ElevenLabs dar nu s-a salvat în baza de date: ${dbError.message}`,
+          title: "Attention",
+          description: `Agent was created in ElevenLabs but not saved to the database: ${dbError.message}`,
           variant: "destructive",
         });
       }
@@ -168,7 +168,7 @@ export const useAgentCreation = ({
       }
 
       toast({
-        title: "Succes!",
+        title: "Success",
         description: `${agentName} ${MESSAGES.SUCCESS.AGENT_CREATED}`,
       });
 
@@ -182,9 +182,9 @@ export const useAgentCreation = ({
       // Show specific message for timeout vs other errors
       const isTimeout = error?.message === 'TIMEOUT';
       toast({
-        title: isTimeout ? "Timeout" : "Eroare",
+        title: isTimeout ? "Timeout" : "Error",
         description: isTimeout
-          ? "Crearea agentului a durat prea mult. Te rugăm să încerci din nou."
+          ? "Agent creation took too long. Please try again."
           : MESSAGES.ERRORS.AGENT_CREATION_FAILED,
         variant: "destructive",
       });

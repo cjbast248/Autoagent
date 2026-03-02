@@ -232,22 +232,22 @@ export const DEFAULT_VALUES = {
 
 export const MESSAGES = {
   ERRORS: {
-    INVALID_URL: 'Te rog introdu un URL valid',
-    MISSING_AGENT_NAME: 'Te rog completează numele agentului.',
-    MISSING_AGENT_ID_OR_PHONE: 'Te rog introdu ID-ul agentului și numărul de telefon',
-    PROMPT_GENERATION_FAILED: 'Nu am putut genera promptul',
-    AGENT_CREATION_FAILED: 'Nu am putut crea agentul',
-    CALL_INITIATION_FAILED: 'Nu am putut iniția apelul',
-    CLIPBOARD_COPY_FAILED: 'Nu am putut copia ID-ul agentului',
+    INVALID_URL: 'Please enter a valid URL',
+    MISSING_AGENT_NAME: 'Please complete the agent name.',
+    MISSING_AGENT_ID_OR_PHONE: 'Please enter agent ID and phone number',
+    PROMPT_GENERATION_FAILED: 'Could not generate prompt',
+    AGENT_CREATION_FAILED: 'Could not create agent',
+    CALL_INITIATION_FAILED: 'Could not initiate call',
+    CLIPBOARD_COPY_FAILED: 'Could not copy agent ID',
   },
   SUCCESS: {
-    PROMPT_GENERATED: 'Promptul a fost generat cu succes',
-    AGENT_CREATED: 'a fost creat cu succes și a fost copiat în clipboard',
-    CALL_INITIATED: 'Apelul a fost inițiat cu succes',
-    CLIPBOARD_COPIED: 'ID-ul agentului a fost copiat în clipboard',
+    PROMPT_GENERATED: 'Prompt generated successfully',
+    AGENT_CREATED: 'has been created successfully and copied to clipboard',
+    CALL_INITIATED: 'Call initiated successfully',
+    CLIPBOARD_COPIED: 'Agent ID copied to clipboard',
   },
   LOADING: {
-    GENERATING_PROMPT: 'Se Generează Prompt',
-    GENERATING_AGENT: 'Se Generează Agent',
+    GENERATING_PROMPT: 'Generating Prompt...',
+    GENERATING_AGENT: 'Generating Agent...',
   },
 } as const;
