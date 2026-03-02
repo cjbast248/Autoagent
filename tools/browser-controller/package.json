@@ -1,0 +1,13 @@
+{
+  "name": "browser-controller",
+  "version": "1.0.0",
+  "description": "Browser automation server for Claude testing",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "install-browser": "npx playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

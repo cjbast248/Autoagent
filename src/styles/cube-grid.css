@@ -1,0 +1,58 @@
+ .cube-grid-container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   height: 100%;
+   perspective: 1000px;
+ }
+ 
+ .cube-grid {
+   --n: 4;
+   --l: 2.75em;
+   --t: 1.5s;
+   display: grid;
+   grid-template-columns: repeat(var(--n), var(--l));
+   gap: 0.5em;
+   transform-style: preserve-3d;
+   transform: rotateX(55deg) rotate(45deg);
+ }
+ 
+ .cube {
+   --i: 0;
+   --j: 0;
+   aspect-ratio: 1;
+   position: relative;
+   transform-style: preserve-3d;
+   transform-origin: 50% 50% calc(-1 * var(--l));
+   background: hsl(var(--foreground));
+   animation: cube-ani var(--t) ease-in-out infinite;
+   animation-delay: calc((var(--n) - 1 - var(--j) + var(--i)) * 0.05 * var(--t));
+ }
+ 
+ .cube-face {
+   position: absolute;
+   inset: 0;
+   transform-style: preserve-3d;
+ }
+ 
+ .cube-face-right {
+   transform-origin: 100% 50%;
+   transform: translateX(100%) rotateY(90deg);
+   background: hsl(var(--muted-foreground) / 0.6);
+ }
+ 
+ .cube-face-bottom {
+   transform-origin: 50% 100%;
+   transform: translateY(100%) rotateX(-90deg);
+   background: hsl(var(--muted-foreground) / 0.4);
+ }
+ 
+ @keyframes cube-ani {
+   0%, 50%, 100% {
+     transform: scaleZ(0);
+   }
+   25% {
+     transform: scaleZ(0.5);
+   }
+ }

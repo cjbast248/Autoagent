@@ -1,0 +1,146 @@
+services:
+  # Redis for BullMQ workflow queue
+  redis:
+    image: redis:7-alpine
+    container_name: kallina-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Workflow Worker (BullMQ)
+  workflow-worker:
+    build:
+      context: ./workflow-worker
+      dockerfile: Dockerfile
+    container_name: kallina-workflow-worker
+    network_mode: host  # Use host network for proper IPv4 routing (required for whitelisted APIs)
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=127.0.0.1  # Use localhost since we're on host network
+      - REDIS_PORT=6379
+      - API_PORT=3001
+      - WORKER_API_SECRET=${WORKER_API_SECRET:-kallina-worker-secret-change-me}
+      - SUPABASE_URL=${SUPABASE_URL:-https://pwfczzxwjfxomqzhhwvj.supabase.co}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - AMOCRM_CLIENT_ID=${AMOCRM_CLIENT_ID}
+      - AMOCRM_CLIENT_SECRET=${AMOCRM_CLIENT_SECRET}
+      - BITRIX24_CLIENT_ID=${BITRIX24_CLIENT_ID}
+      - BITRIX24_CLIENT_SECRET=${BITRIX24_CLIENT_SECRET}
+      - WORKER_CONCURRENCY=10
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  kalina-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      # Database Configuration
+      - SUPABASE_URL=${SUPABASE_URL:-https://pwfczzxwjfxomqzhhwvj.supabase.co}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+
+      # AI & Voice Services
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+
+      # Payment Processing
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+
+      # Email Services
+      - RESEND_API_KEY=${RESEND_API_KEY}
+
+      # Application Configuration
+      - NODE_ENV=${NODE_ENV:-production}
+      - VITE_APP_URL=${VITE_APP_URL:-http://localhost:3000}
+      - VITE_ELEVENLABS_BASE_URL=${VITE_ELEVENLABS_BASE_URL:-https://api.elevenlabs.io/v1}
+      - VITE_DEFAULT_MODEL_ID=${VITE_DEFAULT_MODEL_ID:-eleven_flash_v2_5}
+      - VITE_AGENT_PHONE_NUMBER_ID=${VITE_AGENT_PHONE_NUMBER_ID:-phnum_01jxaeyg3feh3tmx39d4ky63rd}
+
+    env_file:
+      - .env
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 999.md Scraper Microservice
+  scraper-999md:
+    build:
+      context: ./scraper-999md
+      dockerfile: Dockerfile
+    container_name: scraper-999md
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  # Optional: Add a development service
+  kalina-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env.local
+
+volumes:
+  redis_data:
+    driver: local

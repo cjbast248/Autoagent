@@ -1,0 +1,295 @@
+project_id = "sveygocawwiklvozoppq"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://lovable.dev"]
+jwt_expiry = 3600
+enable_signup = true
+enable_manual_linking = false
+
+[edge_runtime]
+enabled = true
+inspector_port = 8083
+
+[functions.get-test-phone-config]
+verify_jwt = true
+
+[functions.gdpr-monitoring]
+verify_jwt = true
+
+[functions.log-security-event]
+verify_jwt = false
+
+[functions.create-callback-webhook]
+verify_jwt = false
+
+[functions.elevenlabs-conversation-webhook]
+verify_jwt = false
+
+[functions.chat-with-agent]
+verify_jwt = false
+
+[functions.chat-with-gpt]
+verify_jwt = false
+
+[functions.create-checkout]
+verify_jwt = false
+
+[functions.create-elevenlabs-agent]
+verify_jwt = true
+
+[functions.delete-elevenlabs-agent]
+verify_jwt = true
+
+[functions.document-processor]
+verify_jwt = true
+
+[functions.generate-agent-prompt]
+verify_jwt = true
+
+[functions.get-agent-conversations]
+verify_jwt = true
+
+[functions.get-conversation-audio]
+verify_jwt = false
+
+[functions.get-elevenlabs-agent]
+verify_jwt = true
+
+[functions.get-elevenlabs-conversation]
+verify_jwt = true
+
+[functions.get-elevenlabs-conversations]
+verify_jwt = true
+
+[functions.initiate-scheduled-call]
+verify_jwt = false
+
+[functions.kalina-chat]
+verify_jwt = false
+
+[functions.kalina-widget]
+verify_jwt = false
+
+[functions.kalina-webhook]
+verify_jwt = false
+
+[functions.knowledge-base-operations]
+verify_jwt = true
+
+[functions.process-document]
+verify_jwt = true
+
+[functions.process-transcript]
+verify_jwt = true
+
+[functions.prompt-generation]
+verify_jwt = true
+
+[functions.save-conversation]
+verify_jwt = false
+
+[functions.send-sms]
+verify_jwt = true
+
+[functions.speech-to-text]
+verify_jwt = true
+
+[functions.text-to-speech]
+verify_jwt = true
+
+[functions.translate-text]
+verify_jwt = true
+
+[functions.update-elevenlabs-agent]
+verify_jwt = true
+
+[functions.verify-payment]
+verify_jwt = false
+
+[functions.web-scraper]
+verify_jwt = false
+
+[functions.intelligent-agent-chat]
+verify_jwt = false
+
+[functions.advanced-home-agent]
+verify_jwt = false
+
+[functions.create-custom-checkout]
+verify_jwt = false
+
+[functions.check-conversation-status]
+verify_jwt = false
+
+[functions.transcribe-conversation-audio]
+verify_jwt = true
+
+[functions.analyze-conversation-for-lead]
+verify_jwt = true
+
+[functions.analyze-conversations-custom]
+verify_jwt = true
+
+[functions.extract-leads-from-conversations]
+verify_jwt = true
+
+[functions.get-sheet-structure]
+verify_jwt = false
+
+[functions.list-google-sheets-files]
+verify_jwt = false
+
+[functions.get-sheet-structure-oauth]
+verify_jwt = true
+
+[functions.list-google-sheets-oauth]
+verify_jwt = false
+
+[functions.telegram-notify-signup]
+verify_jwt = false
+
+[functions.telegram-send-all-users]
+verify_jwt = true
+
+[functions.zoho-oauth-init]
+verify_jwt = true
+
+[functions.zoho-oauth-callback]
+verify_jwt = false
+
+[functions.zoho-sync-call-log]
+verify_jwt = true
+
+[functions.zoho-import-contacts]
+verify_jwt = true
+
+[functions.admin-delete-user]
+verify_jwt = true
+
+[functions.google-sheets-oauth-init]
+verify_jwt = true
+
+[functions.google-sheets-oauth-callback]
+verify_jwt = false
+
+[functions.zoho-crm-get-fields]
+verify_jwt = true
+
+[functions.zoho-crm-get]
+verify_jwt = true
+
+[functions.zoho-crm-get-many]
+verify_jwt = true
+
+[functions.zoho-crm-create]
+verify_jwt = true
+
+[functions.zoho-crm-update]
+verify_jwt = true
+
+[functions.zoho-crm-delete]
+verify_jwt = true
+
+[functions.zoho-crm-upsert]
+verify_jwt = true
+
+[functions.workflow-groq-analysis]
+verify_jwt = false
+
+[functions.workflow-webhook]
+verify_jwt = false
+
+[functions.workflow-webhook-test]
+verify_jwt = false
+
+[functions.send-custom-verification-email]
+verify_jwt = false
+
+[functions.verify-custom-email]
+verify_jwt = false
+
+[functions.configure-agents-webhook]
+verify_jwt = false
+
+[functions.workflow-ai-assistant]
+verify_jwt = false
+
+[functions.sync-agents-webhook]
+verify_jwt = false
+
+[functions.sync-single-agent-webhook]
+verify_jwt = false
+
+[functions.associate-phone-with-agent]
+verify_jwt = true
+
+[functions.get-elevenlabs-voices]
+verify_jwt = true
+
+[functions.altegio-api]
+verify_jwt = false
+
+[functions.altegio-webhook]
+verify_jwt = false
+
+[functions.altegio-callback]
+verify_jwt = false
+
+[functions.amocrm-oauth-init]
+verify_jwt = true
+
+[functions.amocrm-oauth-callback]
+verify_jwt = false
+
+[functions.amocrm-api]
+verify_jwt = true
+
+[functions.process-call-cost]
+verify_jwt = false
+
+[functions.process-unprocessed-calls]
+verify_jwt = false
+
+[functions.chat-widget-groq]
+verify_jwt = false
+
+[functions.get-widget-config]
+verify_jwt = false
+
+[functions.scrape-products]
+verify_jwt = false
+
+[functions.get-product-by-id]
+verify_jwt = false
+
+[functions.widget-voice-session]
+verify_jwt = false
+
+[functions.widget-submit-order]
+verify_jwt = false
+
+[functions.widget-voice-tools]
+verify_jwt = false
+
+[functions.widget-voice-mcp]
+verify_jwt = false
+
+[functions.bitrix24-oauth-init]
+verify_jwt = true
+
+[functions.bitrix24-oauth-callback]
+verify_jwt = false
+
+[functions.bitrix24-webhook]
+verify_jwt = false
+
+[functions.bitrix24-api]
+verify_jwt = true

@@ -1,0 +1,94 @@
+name: Deploy to Production-clean before
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            echo "🚀 Starting deployment..."
+            cd ~/kallina.info
+            
+            # Pull latest code
+            echo "📥 Pulling latest code..."
+            git pull origin main
+            
+            # ========================================
+            # STOP EVERYTHING FIRST
+            # ========================================
+            echo "🛑 Stopping all services..."
+            docker compose down -v --remove-orphans
+            
+            # Stop scraper if separate
+            if [ -d "scraper-999md" ] && [ -f "scraper-999md/docker-compose.yml" ]; then
+              cd scraper-999md
+              docker compose down -v --remove-orphans
+              cd ..
+            fi
+            
+            # ========================================
+            # REMOVE STUCK CONTAINERS
+            # ========================================
+            echo "🧹 Removing all stuck containers..."
+            docker rm -f scraper-999md 2>/dev/null || true
+            docker ps -aq --filter "name=kallina" | xargs -r docker rm -f 2>/dev/null || true
+            docker ps -aq --filter "name=kalina" | xargs -r docker rm -f 2>/dev/null || true
+            docker ps -aq --filter "name=scraper" | xargs -r docker rm -f 2>/dev/null || true
+            
+            # ========================================
+            # BUILD & START MAIN APP
+            # ========================================
+            echo "🏗️  Building main app..."
+            docker compose build --no-cache --pull
+            
+            echo "▶️  Starting main app..."
+            docker compose up -d
+            
+            # ========================================
+            # BUILD & START SCRAPER (if separate)
+            # ========================================
+            if [ -d "scraper-999md" ] && [ -f "scraper-999md/docker-compose.yml" ]; then
+              echo "🏗️  Building scraper..."
+              cd scraper-999md
+              docker compose build --no-cache
+              
+              echo "▶️  Starting scraper..."
+              docker compose up -d
+              cd ..
+            fi
+            
+            # ========================================
+            # CLEANUP
+            # ========================================
+            echo "🧹 Cleaning up unused images..."
+            docker image prune -af
+            
+            # ========================================
+            # VERIFICATION
+            # ========================================
+            echo "⏳ Waiting 15 seconds for services..."
+            sleep 15
+            
+            echo "✅ Main app status:"
+            docker compose ps
+            
+            if [ -d "scraper-999md" ] && [ -f "scraper-999md/docker-compose.yml" ]; then
+              echo "✅ Scraper status:"
+              cd scraper-999md && docker compose ps && cd ..
+            fi
+            
+            echo "📋 Main app logs (last 20 lines):"
+            docker compose logs --tail 20
+            
+            echo "🎉 Deploy completed successfully at $(date)"

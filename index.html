@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#ffffff" />
+    <title>Agent Automation</title>
+    
+    <!-- Preconnect to critical external origins to reduce request chain delays -->
+    <link rel="preconnect" href="https://pwfczzxwjfxomqzhhwvj.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://api.elevenlabs.io" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.gpteng.co" crossorigin>
+    <link rel="dns-prefetch" href="https://pwfczzxwjfxomqzhhwvj.supabase.co">
+    <link rel="dns-prefetch" href="https://api.elevenlabs.io">
+    <link rel="dns-prefetch" href="https://storage.googleapis.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.gpteng.co">
+    
+    <!-- Performance optimizations for critical resources -->
+
+  <!-- ElevenLabs-like, tall/condensed font: Inter Tight (variable) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    
+    
+    <!-- Critical CSS loading optimization to prevent render blocking -->
+    <style>
+      /* Critical above-the-fold styles to prevent FOUC and improve Speed Index */
+  html, body { margin: 0; padding: 0; font-family: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif; background: #1a1a1a; color: #ffffff; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+      #root { min-height: 100vh; background: #1a1a1a; }
+      .loading-container { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; }
+      .loading-skeleton { width: 100%; max-width: 1200px; padding: 20px; }
+      .skeleton-header { height: 60px; background: #f3f4f6; border-radius: 8px; margin-bottom: 20px; }
+      .skeleton-sidebar { width: 250px; height: 400px; background: #f3f4f6; border-radius: 8px; float: left; margin-right: 20px; }
+      .skeleton-content { height: 300px; background: #f3f4f6; border-radius: 8px; overflow: hidden; }
+      .skeleton-shimmer { background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%); background-size: 200% 100%; animation: shimmer 2s infinite; }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    </style>
+    <meta name="description" content="Agent Automation Portal">
+    <meta name="author" content="Automation Team" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg">
+
+    <meta property="og:title" content="Agent Automation Project" />
+    <meta property="og:description" content="A comprehensive automation dashboard" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/vite.svg">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@agentauto" />
+    <meta name="twitter:image" content="/vite.svg">
+    
+    <!-- Google Identity Services for native account chooser popup -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="loading-container">
+        <div class="loading-skeleton">
+          <div class="skeleton-header skeleton-shimmer"></div>
+          <div class="skeleton-sidebar skeleton-shimmer"></div>
+          <div class="skeleton-content skeleton-shimmer"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Optimize script loading to reduce Total Blocking Time -->
+    <script>
+      // Break up long tasks to reduce TBT
+      if ('requestIdleCallback' in window) {
+        // Defer non-critical initialization work
+        requestIdleCallback(() => {
+          // Schedule non-critical work during idle time
+          const deferredWork = () => {
+            // Any heavy initialization can be scheduled here
+          };
+          deferredWork();
+        }, { timeout: 2000 });
+      }
+      
+      // Use scheduler API if available to yield to browser
+      if ('scheduler' in window && 'postTask' in scheduler) {
+        scheduler.postTask(() => {
+          // Low priority tasks
+        }, { priority: 'background' });
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    
+
+  </body>
+</html>

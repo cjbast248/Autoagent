@@ -1,0 +1,143 @@
+# =============================================================================
+# KALLINA.INFO - STAGING ENVIRONMENT
+# =============================================================================
+# Usage: docker compose -f docker-compose.staging.yml up -d --build
+# Stop:  docker compose -f docker-compose.staging.yml down
+#
+# This runs completely separate from production on different ports.
+# =============================================================================
+
+services:
+  # Redis for BullMQ workflow queue (STAGING)
+  redis-staging:
+    image: redis:7-alpine
+    container_name: kallina-redis-staging
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_staging_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - kallina-staging-network
+
+  # Workflow Worker (STAGING)
+  workflow-worker-staging:
+    build:
+      context: ./workflow-worker
+      dockerfile: Dockerfile
+    container_name: kallina-workflow-worker-staging
+    depends_on:
+      redis-staging:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis-staging
+      - REDIS_PORT=6379
+      - API_PORT=3001
+      - WORKER_API_SECRET=${WORKER_API_SECRET:-kallina-staging-secret}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - AMOCRM_CLIENT_ID=${AMOCRM_CLIENT_ID}
+      - AMOCRM_CLIENT_SECRET=${AMOCRM_CLIENT_SECRET}
+      - BITRIX24_CLIENT_ID=${BITRIX24_CLIENT_ID}
+      - BITRIX24_CLIENT_SECRET=${BITRIX24_CLIENT_SECRET}
+      - WORKER_CONCURRENCY=5
+    env_file:
+      - .env.staging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - kallina-staging-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Main Application (STAGING) - Port 4000 instead of 3000
+  kalina-app-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kallina-app-staging
+    ports:
+      - "4000:80"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - NODE_ENV=staging
+      - VITE_APP_URL=${VITE_APP_URL:-https://dev.kallina.info}
+      - VITE_ELEVENLABS_BASE_URL=${VITE_ELEVENLABS_BASE_URL:-https://api.elevenlabs.io/v1}
+      - VITE_DEFAULT_MODEL_ID=${VITE_DEFAULT_MODEL_ID:-eleven_flash_v2_5}
+      - VITE_AGENT_PHONE_NUMBER_ID=${VITE_AGENT_PHONE_NUMBER_ID}
+    env_file:
+      - .env.staging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - kallina-staging-network
+
+  # 999.md Scraper (STAGING) - Port 8001 instead of 8000
+  scraper-999md-staging:
+    build:
+      context: ./scraper-999md
+      dockerfile: Dockerfile
+    container_name: scraper-999md-staging
+    ports:
+      - "8001:8000"
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      kallina-staging-network:
+        aliases:
+          - scraper-999md
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+networks:
+  kallina-staging-network:
+    driver: bridge
+
+volumes:
+  redis_staging_data:
+    driver: local

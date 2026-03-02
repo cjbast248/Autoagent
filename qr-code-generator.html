@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kallina Summit QR Code Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .url-box {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .url-text {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f97316;
+        }
+
+        .qr-container {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        #qrcode {
+            display: inline-block;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-group {
+            display: grid;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+
+        .info-box p {
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #78350f;
+            font-weight: 700;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #f97316;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎁 Kallina Summit QR Code</h1>
+        <p class="subtitle">Generator de QR Code pentru Campania Promoțională</p>
+
+        <div class="url-box">
+            <div class="url-text" id="qr-url">kallina.info/summit</div>
+        </div>
+
+        <div class="qr-container">
+            <div id="qrcode"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">100K</div>
+                <div class="stat-label">Credite</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$100</div>
+                <div class="stat-label">Valoare</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">FREE</div>
+                <div class="stat-label">Cost</div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button onclick="downloadQR()">📥 Descarcă QR Code (PNG)</button>
+            <button onclick="downloadSVG()">📥 Descarcă QR Code (SVG)</button>
+            <button onclick="window.print()">🖨️ Printează QR Code</button>
+        </div>
+
+        <div class="info-box">
+            <p>
+                <strong>📱 Cum se folosește:</strong><br>
+                1. Descarcă QR code-ul folosind butoanele de mai sus<br>
+                2. Afișează-l la eveniment pe ecran, banner sau flyer<br>
+                3. Participanții scanează și primesc automat 100,000 credite<br>
+                4. Verifică statisticile în dashboard-ul admin
+            </p>
+        </div>
+    </div>
+
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        // Configuration
+        const QR_URL = 'https://kallina.info/summit';
+        const QR_SIZE = 300;
+
+        // Generate QR Code
+        const qrcode = new QRCode(document.getElementById('qrcode'), {
+            text: QR_URL,
+            width: QR_SIZE,
+            height: QR_SIZE,
+            colorDark: '#1f2937',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Download QR as PNG
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('QR Code nu este generat încă. Te rog așteaptă.');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.download = 'kallina-summit-qr-code.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Download QR as SVG (convert canvas to SVG data URL)
+        function downloadSVG() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('QR Code nu este generat încă. Te rog așteaptă.');
+                return;
+            }
+
+            // Convert canvas to image data
+            const img = canvas.toDataURL('image/png');
+
+            // Create SVG with embedded image
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${QR_SIZE}" height="${QR_SIZE}">
+                    <image href="${img}" width="${QR_SIZE}" height="${QR_SIZE}"/>
+                </svg>
+            `;
+
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.download = 'kallina-summit-qr-code.svg';
+            link.href = url;
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // Update URL display
+        document.getElementById('qr-url').textContent = QR_URL;
+    </script>
+</body>
+</html>
