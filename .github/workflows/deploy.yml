@@ -29,6 +29,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://sveygocawwiklvozoppq.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXlnb2Nhd3dpa2x2b3pvcHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODcyNzgsImV4cCI6MjA4Nzk2MzI3OH0.gI6zpZKNXrPu-F3047UuvVDYC0f3R6-FFnCX9iBuM7k' }}
+          VITE_ELEVENLABS_API_KEY: ${{ secrets.VITE_ELEVENLABS_API_KEY }}
           VITE_APP_URL: https://cjbast248.github.io/Autoagent
           NODE_ENV: production
 
