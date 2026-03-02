@@ -27,8 +27,8 @@ export const useWorkflowProjects = () => {
   const [projects, setProjects] = useState<WorkflowProject[]>(() => {
     // Initialize from cache if valid
     if (globalProjectsCache &&
-        user?.id === globalProjectsCache.userId &&
-        Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
+      user?.id === globalProjectsCache.userId &&
+      Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
       return globalProjectsCache.data;
     }
     return [];
@@ -38,7 +38,7 @@ export const useWorkflowProjects = () => {
   const [isLoading, setIsLoading] = useState(() => {
     // Don't show loading if we have cached data
     if (globalProjectsCache && user?.id === globalProjectsCache.userId &&
-        Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
+      Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
       return false;
     }
     return true;
@@ -65,7 +65,7 @@ export const useWorkflowProjects = () => {
 
     // Check valid cache first
     if (!forceRefetch && globalProjectsCache?.userId === user.id &&
-        Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
+      Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
       console.log('[Workflows] Using cached data');
       setProjects(globalProjectsCache.data);
       setIsLoading(false);
@@ -235,6 +235,8 @@ export const useWorkflowProjects = () => {
             nodes,
             connections,
             status: 'draft',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           }),
         }, 15000);
 
@@ -392,6 +394,8 @@ export const useWorkflowProjects = () => {
           nodes: project.nodes,
           connections: project.connections,
           status: 'draft',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         }),
       }, 15000); // 15s timeout
 
@@ -601,7 +605,7 @@ export const useWorkflowProjects = () => {
 
     // If we have valid cache, don't fetch
     if (projects.length > 0 && globalProjectsCache?.userId === user?.id &&
-        Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
+      Date.now() - globalProjectsCache.timestamp < CACHE_TTL) {
       setIsLoading(false);
       return;
     }
