@@ -32,16 +32,15 @@ interface AgentVoiceSelectorProps {
 
 // Voice metadata
 const VOICE_META: Record<string, { gender: string; style: string }> = {
-  'SF9uvIlY93SJRMdV5jeP': { gender: 'MALE', style: 'NATURAL' },
-  'rH7tm6lnSf2VO2mn7ruB': { gender: 'MALE', style: 'DEEP' },
-  'nSy0mRVd6M2pA4tEtNZG': { gender: 'MALE', style: 'STANDARD' },
-  'm7yTemJqdIqrcNleANfX': { gender: 'FEMALE', style: 'SOFT' },
-  'urzoE6aZYmSRdFQ6215h': { gender: 'MALE', style: 'ROBOTIC' },
-  'TpRoLEgD7nA9RotK1zIv': { gender: 'MALE', style: 'STANDARD' },
-  'kzOjSddNpacn5uKPKxDC': { gender: 'MALE', style: 'DEEP' },
-  '7EzWGsX10sAS4c9m9cPf': { gender: 'MALE', style: 'STANDARD' },
-  'EnjklPXGBMNldCJ7jqkE': { gender: 'MALE', style: 'STANDARD' },
-  'UgBBYS2sOqTuMpoF3BR0': { gender: 'FEMALE', style: 'NEWS' },
+  '21m00Tcm4TlvDq8ikWAM': { gender: 'FEMALE', style: 'BALANCED' },  // Rachel
+  'EXAVITQu4vr4xnSDxMaL': { gender: 'FEMALE', style: 'BRIGHT' },    // Bella
+  'ErXwobaYiN019PkySvjV': { gender: 'MALE', style: 'BALANCED' },    // Antoni
+  'MF3mGyEYCl7XYWbV9V6O': { gender: 'FEMALE', style: 'DEEP' },      // Elli
+  'TxGEqnHWrfWFTfGW9XjX': { gender: 'MALE', style: 'DEEP' },        // Josh
+  'VR6AewLTigWG4xSOukaG': { gender: 'MALE', style: 'DEEP' },        // Arnold
+  'pNInz6obpgDQGcFmaJgB': { gender: 'MALE', style: 'DEEP' },        // Adam
+  'yoZ06aMxZJJ28mfd3POQ': { gender: 'MALE', style: 'BALANCED' },    // Sam
+  'ZQe5CZNOzWyzPSCn5a3c': { gender: 'MALE', style: 'BALANCED' },    // James
 };
 
 // TTS Model options
@@ -114,7 +113,7 @@ export function AgentVoiceSelector({
       id: v.id,
       name: v.name,
       isCloned: false,
-      meta: VOICE_META[v.id] || { gender: 'MALE', style: 'STANDARD' }
+      meta: VOICE_METADATA[v.id] || { gender: 'MALE', style: 'STANDARD' }
     }));
     return [...cloned, ...staticVoices];
   }, [clonedVoices]);
@@ -292,9 +291,8 @@ export function AgentVoiceSelector({
                         handleVoiceSelect(voice.id, voice.name);
                         setSearchQuery('');
                       }}
-                      className={`cursor-pointer group flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 ${
-                        isSelected ? 'bg-zinc-100' : 'hover:bg-zinc-50'
-                      }`}
+                      className={`cursor-pointer group flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 ${isSelected ? 'bg-zinc-100' : 'hover:bg-zinc-50'
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-black' : 'bg-transparent'}`} />
@@ -351,9 +349,8 @@ export function AgentVoiceSelector({
                         handleSettingChange('model_id', model.id);
                         setIsModelDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-zinc-50 transition ${
-                        model.id === modelId ? 'bg-zinc-50' : ''
-                      }`}
+                      className={`w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-zinc-50 transition ${model.id === modelId ? 'bg-zinc-50' : ''
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <div className={`w-1.5 h-1.5 rounded-full ${model.id === modelId ? 'bg-black' : 'bg-transparent'}`} />

@@ -11,16 +11,15 @@ export const API_CONFIG = {
 } as const;
 
 export const VOICES = [
-  { id: 'SF9uvIlY93SJRMdV5jeP', name: 'Andrew Griffin' },
-  { id: 'rH7tm6lnSf2VO2mn7ruB', name: 'Xyloth' },
-  { id: 'nSy0mRVd6M2pA4tEtNZG', name: 'Vornex' },
-  { id: 'm7yTemJqdIqrcNleANfX', name: 'Miralis' },
-  { id: 'urzoE6aZYmSRdFQ6215h', name: 'Zeron-5' },
-  { id: 'TpRoLEgD7nA9RotK1zIv', name: 'Torquex' },
-  { id: 'kzOjSddNpacn5uKPKxDC', name: 'Krazon' },
-  { id: '7EzWGsX10sAS4c9m9cPf', name: 'Exalar' },
-  { id: 'EnjklPXGBMNldCJ7jqkE', name: 'Plexus' },
-  { id: 'UgBBYS2sOqTuMpoF3BR0', name: 'Beryl-X' },
+  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel' },
+  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella' },
+  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni' },
+  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli' },
+  { id: 'TxGEqnHWrfWFTfGW9XjX', name: 'Josh' },
+  { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold' },
+  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam' },
+  { id: 'yoZ06aMxZJJ28mfd3POQ', name: 'Sam' },
+  { id: 'ZQe5CZNOzWyzPSCn5a3c', name: 'James' }
 ] as const;
 
 // ElevenLabs LLM options - Exact match with ElevenLabs UI
@@ -226,7 +225,7 @@ export const LANGUAGES = [
 ] as const;
 
 export const DEFAULT_VALUES = {
-  VOICE_ID: 'rH7tm6lnSf2VO2mn7ruB', // Xyloth
+  VOICE_ID: '21m00Tcm4TlvDq8ikWAM', // Rachel
   LANGUAGE: 'ro',
 } as const;
 
