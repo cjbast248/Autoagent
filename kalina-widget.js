@@ -1,5 +1,5 @@
 
-(function() {
+(function () {
   'use strict';
 
   // Prevent multiple widget initializations
@@ -8,7 +8,7 @@
   }
 
   // Configuration
-  const SUPABASE_URL = 'https://pwfczzxwjfxomqzhhwvj.supabase.co';
+  const SUPABASE_URL = 'https://sveygocawwiklvozoppq.supabase.co';
   const CHAT_ENDPOINT = `${SUPABASE_URL}/functions/v1/kalina-chat`;
 
   // Widget class
@@ -21,7 +21,7 @@
       this.conversation = [];
       this.audioQueue = [];
       this.currentAudio = null;
-      
+
       if (!this.agentId) {
         console.error('Kalina Widget: agent-id attribute is required');
         return;
@@ -355,7 +355,7 @@
       `;
 
       this.element.appendChild(container);
-      
+
       // Cache DOM elements
       this.toggleBtn = container.querySelector('#kalina-toggle-btn');
       this.chatWindow = container.querySelector('#kalina-chat');
@@ -369,7 +369,7 @@
       this.toggleBtn.addEventListener('click', () => this.toggleChat());
       this.closeBtn.addEventListener('click', () => this.closeChat());
       this.sendBtn.addEventListener('click', () => this.sendMessage());
-      
+
       this.input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
@@ -413,14 +413,14 @@
       // Add user message to conversation
       this.addMessage('user', message);
       this.conversation.push({ role: 'user', content: message });
-      
+
       // Clear input
       this.input.value = '';
       this.autoResize();
-      
+
       // Show typing indicator
       this.showTypingIndicator();
-      
+
       try {
         // Send to backend
         const response = await fetch(CHAT_ENDPOINT, {
@@ -440,10 +440,10 @@
         }
 
         const data = await response.json();
-        
+
         // Hide typing indicator
         this.hideTypingIndicator();
-        
+
         if (data.error) {
           throw new Error(data.error);
         }
@@ -451,7 +451,7 @@
         // Add assistant response
         this.addMessage('assistant', data.text || data.message || 'Ne pare rău, nu am putut genera un răspuns.');
         this.conversation.push({ role: 'assistant', content: data.text || data.message });
-        
+
         // Play audio if available
         if (data.audio) {
           this.playAudio(data.audio);
@@ -467,24 +467,24 @@
     addMessage(role, content) {
       const messageDiv = document.createElement('div');
       messageDiv.className = `kalina-widget-message ${role}`;
-      
+
       const avatar = role === 'user' ? '👤' : '🤖';
-      
+
       messageDiv.innerHTML = `
         <div class="kalina-widget-message-avatar">${avatar}</div>
         <div class="kalina-widget-message-content">${this.escapeHtml(content)}</div>
       `;
-      
+
       this.messagesContainer.appendChild(messageDiv);
       this.scrollToBottom();
     }
 
     showTypingIndicator() {
       if (this.isTyping) return;
-      
+
       this.isTyping = true;
       this.sendBtn.disabled = true;
-      
+
       const typingDiv = document.createElement('div');
       typingDiv.className = 'kalina-widget-typing';
       typingDiv.id = 'kalina-typing-indicator';
@@ -496,7 +496,7 @@
           <div class="kalina-widget-typing-dot"></div>
         </div>
       `;
-      
+
       this.messagesContainer.appendChild(typingDiv);
       this.scrollToBottom();
     }
@@ -504,7 +504,7 @@
     hideTypingIndicator() {
       this.isTyping = false;
       this.sendBtn.disabled = false;
-      
+
       const typingIndicator = document.getElementById('kalina-typing-indicator');
       if (typingIndicator) {
         typingIndicator.remove();
@@ -538,7 +538,7 @@
         "'": '&#039;',
         '/': '&#x2F;'
       };
-      return String(text).replace(/[&<>"'\/]/g, function(m) { return map[m]; });
+      return String(text).replace(/[&<>"'\/]/g, function (m) { return map[m]; });
     }
   }
 

@@ -1,11 +1,11 @@
 // Agentauto Chat Widget - Identical to Dashboard Preview
-(function() {
+(function () {
   'use strict';
 
-  const SUPABASE_URL = 'https://pwfczzxwjfxomqzhhwvj.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3ZmN6enh3amZ4b21xemhod3ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwMTA3OTEsImV4cCI6MjA0OTU4Njc5MX0.4FVIwnc25GwEbDTR_TIvVYztvz9pwZ5uKBFkeMw4dHg';
+  const SUPABASE_URL = 'https://sveygocawwiklvozoppq.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXlnb2Nhd3dpa2x2b3pvcHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODcyNzgsImV4cCI6MjA4Nzk2MzI3OH0.gI6zpZKNXrPu-F3047UuvVDYC0f3R6-FFnCX9iBuM7k';
 
-  const AGENTAUTO_LOGO = 'https://pwfczzxwjfxomqzhhwvj.supabase.co/storage/v1/object/public/Poze%20Agentauto/Group%2010.jpg';
+  const AGENTAUTO_LOGO = 'https://sveygocawwiklvozoppq.supabase.co/storage/v1/object/public/Poze%20Agentauto/Group%2010.jpg';
 
   // Load ElevenLabs Convai SDK
   let ElevenLabsConvai = null;
@@ -2414,9 +2414,9 @@
             ${field.required ? '<span class="required">*</span>' : ''}
           </label>
           ${field.type === 'textarea'
-            ? `<textarea class="form-input" data-field="${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}></textarea>`
-            : `<input type="${field.type}" class="form-input" data-field="${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}/>`
-          }
+          ? `<textarea class="form-input" data-field="${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}></textarea>`
+          : `<input type="${field.type}" class="form-input" data-field="${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''}/>`
+        }
           <div class="form-error" data-error="${field.id}"></div>
         </div>
       `).join('');
@@ -2951,8 +2951,8 @@
       this.renderMobileMessages(overlay);
 
       try {
-        const SUPABASE_URL = 'https://pwfczzxwjfxomqzhhwvj.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3ZmN6enh3amZ4b21xemhod3ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwMTA3OTEsImV4cCI6MjA0OTU4Njc5MX0.4FVIwnc25GwEbDTR_TIvVYztvz9pwZ5uKBFkeMw4dHg';
+        const SUPABASE_URL = 'https://sveygocawwiklvozoppq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXlnb2Nhd3dpa2x2b3pvcHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODcyNzgsImV4cCI6MjA4Nzk2MzI3OH0.gI6zpZKNXrPu-F3047UuvVDYC0f3R6-FFnCX9iBuM7k';
 
         const res = await fetch(`${SUPABASE_URL}/functions/v1/chat-widget-groq`, {
           method: 'POST',
