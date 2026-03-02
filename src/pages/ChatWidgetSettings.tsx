@@ -1448,21 +1448,7 @@ const ChatWidgetSettings = () => {
                           className="flex items-center gap-1 text-[10px] font-normal normal-case text-red-500 hover:text-red-600 transition-colors"
                         >
                           <Trash2 className="w-3 h-3" />
-                          Șterge tot
-                        </button>
-                      )}
-                      {canImportEsushi && (
-                        <button
-                          onClick={handleImportEsushi}
-                          disabled={isImportingEsushi}
-                          className="flex items-center gap-1 text-[10px] font-normal normal-case text-orange-600 hover:text-orange-700 transition-colors disabled:opacity-50"
-                        >
-                          {isImportingEsushi ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Download className="w-3 h-3" />
-                          )}
-                          Import esushi.md
+                          Delete all
                         </button>
                       )}
                       <button
