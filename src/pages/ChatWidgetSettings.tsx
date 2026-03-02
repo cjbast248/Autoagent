@@ -764,7 +764,7 @@ const ChatWidgetSettings = () => {
   const handleDeleteAllProducts = async () => {
     if (!widgetConfig?.id) return;
 
-    if (!confirm('Ești sigur că vrei să ștergi TOATE produsele? Această acțiune nu poate fi anulată.')) {
+    if (!confirm('Are you sure you want to delete ALL products? This action cannot be undone.')) {
       return;
     }
 
@@ -777,10 +777,10 @@ const ChatWidgetSettings = () => {
       if (error) throw error;
 
       setProducts([]);
-      toast.success('Toate produsele au fost șterse!');
+      toast.success('All products deleted!');
     } catch (error: any) {
       console.error('Error deleting products:', error);
-      toast.error('Eroare la ștergerea produselor');
+      toast.error('Error deleting products');
     }
   };
 
@@ -964,17 +964,17 @@ const ChatWidgetSettings = () => {
         .eq('id', widgetConfig.id);
 
       if (error) throw error;
-      toast.success('Configurația a fost salvată!');
+      toast.success('Configuration saved!');
     } catch (error: any) {
       console.error('Error saving config:', error);
-      toast.error('Eroare la salvarea configurației');
+      toast.error('Error saving configuration');
     } finally {
       setIsSaving(false);
     }
   };
 
   const embedCode = widgetConfig ? `<agentauto-chat widget-id="${widgetConfig.widget_id || ''}"></agentauto-chat>
-<script src="https://app.agentauto.app/widget/chat.js" async></script>` : '';
+<script src="https://cjbast248.github.io/Autoagent/widget/chat.js" async></script>` : '';
 
   // Debug logging for widget_id
   console.log('🔍 Embed code debug:', {
@@ -985,7 +985,7 @@ const ChatWidgetSettings = () => {
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(embedCode);
-    toast.success('Codul a fost copiat!');
+    toast.success('Code copied to clipboard!');
   };
 
   const sendMessage = async () => {
@@ -1020,7 +1020,7 @@ const ChatWidgetSettings = () => {
       if (data?.success && data?.message) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
       } else {
-        const errorMsg = data?.error || 'Eroare la generarea răspunsului';
+        const errorMsg = data?.error || 'Error generating response';
         setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
       }
     } catch (error: any) {
@@ -1028,7 +1028,7 @@ const ChatWidgetSettings = () => {
       toast.error('Eroare la conectare');
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Nu am putut stabili conexiunea. Te rog încearcă din nou.'
+        content: 'Could not establish connection. Please try again.'
       }]);
     } finally {
       setIsLoading(false);
@@ -1084,7 +1084,7 @@ const ChatWidgetSettings = () => {
         } else {
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: data?.error || 'Eroare la generarea răspunsului'
+            content: data?.error || 'Error generating response'
           }]);
         }
       }).finally(() => {
