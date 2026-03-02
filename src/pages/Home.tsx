@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/components/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AdvancedHomeAgent } from '@/components/AdvancedHomeAgent';
 import { useOnboardingQuiz } from '@/hooks/useOnboardingQuiz';
 
 const Home = () => {
   const { user, session, loading } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isCompleted, loading: quizLoading } = useOnboardingQuiz();
   const [forceReady, setForceReady] = useState(false);
@@ -35,7 +37,7 @@ const Home = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="text-muted-foreground">Se încarcă...</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
       </div>
     );
@@ -64,7 +66,7 @@ const Home = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="text-muted-foreground">Se încarcă...</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
       </div>
     );

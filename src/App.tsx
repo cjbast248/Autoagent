@@ -2,6 +2,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./components/AuthContext";
+import { useTranslation } from "react-i18next";
 import { AdminRoute } from "./components/secure/AdminRoute";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -95,6 +96,7 @@ const queryClient = new QueryClient({
 
 function AppWithWelcome() {
   const { showWelcome, setShowWelcome } = useAuth();
+  const { t } = useTranslation();
 
   // Check for ?welcome=true in URL for testing animation
   const [forceWelcome, setForceWelcome] = React.useState(() => {
@@ -130,7 +132,7 @@ function AppWithWelcome() {
             <div className="min-h-[400px] w-full flex items-center justify-center">
               <div className="text-center space-y-4">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                <p className="text-muted-foreground animate-pulse">Se încarcă...</p>
+                <p className="text-muted-foreground animate-pulse">{t("common.loading")}</p>
               </div>
             </div>
           </DashboardLayout>

@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Home, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 const NotFound = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Redirect /event/* to homepage
@@ -27,28 +29,28 @@ const NotFound = () => {
       <Card className="liquid-glass relative z-10 max-w-md w-full animate-fade-in">
         <CardHeader className="text-center">
           <CardTitle className="text-4xl font-bold text-foreground mb-2">404</CardTitle>
-          <p className="text-xl text-foreground">Pagina nu a fost găsită</p>
+          <p className="text-xl text-foreground">{t("notFound.title", "Pagina nu a fost găsită")}</p>
         </CardHeader>
         <CardContent className="text-center space-y-6">
           <p className="text-muted-foreground">
-            Ne pare rău, dar pagina pe care o căutați nu există sau a fost mutată.
+            {t("notFound.description", "Ne pare rău, dar pagina pe care o căutați nu există sau a fost mutată.")}
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild className="glass-button">
               <Link to="/" className="flex items-center">
                 <Home className="w-4 h-4 mr-2" />
-                Înapoi acasă
+                {t("notFound.backHome", "Înapoi acasă")}
               </Link>
             </Button>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               onClick={() => window.history.back()}
               className="glass-button border-border"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Înapoi
+              {t("common.back", "Înapoi")}
             </Button>
           </div>
         </CardContent>
