@@ -899,6 +899,8 @@ const ChatWidgetSettings = () => {
             placeholder: widgetSettings.placeholder,
             show_powered_by: widgetSettings.showPoweredBy,
             sound_enabled: widgetSettings.soundEnabled,
+            updated_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
           } as any)
           .select(); // Removed .single() to handle potential array return, though insert usually returns single.
 
