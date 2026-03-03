@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { cn } from '@/utils/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/AuthContext';
+import { elevenLabsApi } from '@/utils/apiService';
 
 // Type for cloned voice from database
 interface ClonedVoice {
@@ -19,94 +20,85 @@ interface ClonedVoice {
 // Voice data - available voices
 const VOICE_DATA = [
   {
-    id: 'SF9uvIlY93SJRMdV5jeP',
-    name: 'Andrew Griffin',
+    id: '21m00Tcm4TlvDq8ikWAM',
+    name: 'Rachel',
+    gender: 'Female',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Premium',
+    tags: ['FEMALE', 'SOFT', 'AMERICAN'],
+  },
+  {
+    id: 'EXAVITQu4vr4xnSDxMaL',
+    name: 'Bella',
+    gender: 'Female',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Premium',
+    tags: ['FEMALE', 'BRIGHT', 'AMERICAN'],
+  },
+  {
+    id: 'ErXwobaYiN019PkySvjV',
+    name: 'Antoni',
+    gender: 'Male',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Standard',
+    tags: ['MALE', 'WARM', 'AMERICAN'],
+  },
+  {
+    id: 'MF3mGyEYCl7XYWbV9V6O',
+    name: 'Elli',
+    gender: 'Female',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Standard',
+    tags: ['FEMALE', 'CLEAR', 'AMERICAN'],
+  },
+  {
+    id: 'TxGEqnHWrfWFTfGW9XjX',
+    name: 'Josh',
     gender: 'Male',
     accent: 'American',
     provider: 'elevenlabs',
     tier: 'Premium',
+    tags: ['MALE', 'DEEP', 'AMERICAN'],
+  },
+  {
+    id: 'VR6AewLTigWG4xSOukaG',
+    name: 'Arnold',
+    gender: 'Male',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Standard',
+    tags: ['MALE', 'DEEP', 'AMERICAN'],
+  },
+  {
+    id: 'pNInz6obpgDQGcFmaJgB',
+    name: 'Adam',
+    gender: 'Male',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Premium',
+    tags: ['MALE', 'NARRATION', 'AMERICAN'],
+  },
+  {
+    id: 'yoZ06aMxZJJ28mfd3POQ',
+    name: 'Sam',
+    gender: 'Male',
+    accent: 'American',
+    provider: 'elevenlabs',
+    tier: 'Standard',
     tags: ['MALE', 'NATURAL', 'AMERICAN'],
   },
   {
-    id: 'rH7tm6lnSf2VO2mn7ruB',
-    name: 'Xyloth',
+    id: 'ZQe5CZNOzWyzPSCn5a3c',
+    name: 'James',
     gender: 'Male',
-    accent: 'Standard',
+    accent: 'American',
     provider: 'elevenlabs',
     tier: 'Premium',
-    tags: ['MALE', 'DEEP', 'NARRATION'],
-  },
-  {
-    id: 'nSy0mRVd6M2pA4tEtNZG',
-    name: 'Vornex',
-    gender: 'Male',
-    accent: 'Standard',
-    provider: 'elevenlabs',
-    tier: 'Standard',
-    tags: ['MALE', 'WARM', 'CONVERSATIONAL'],
-  },
-  {
-    id: 'm7yTemJqdIqrcNleANfX',
-    name: 'Miralis',
-    gender: 'Female',
-    accent: 'Standard',
-    provider: 'playht',
-    tier: 'Standard',
-    tags: ['FEMALE', 'SOFT', 'CALM'],
-  },
-  {
-    id: 'urzoE6aZYmSRdFQ6215h',
-    name: 'Zeron-5',
-    gender: 'Male',
-    accent: 'Standard',
-    provider: 'elevenlabs',
-    tier: 'Premium',
-    tags: ['MALE', 'ROBOTIC', 'CLEAR'],
-  },
-  {
-    id: 'TpRoLEgD7nA9RotK1zIv',
-    name: 'Torquex',
-    gender: 'Male',
-    accent: 'Standard',
-    provider: 'playht',
-    tier: 'Standard',
-    tags: ['MALE', 'FAST', 'ENERGETIC'],
-  },
-  {
-    id: 'kzOjSddNpacn5uKPKxDC',
-    name: 'Krazon',
-    gender: 'Male',
-    accent: 'Russian',
-    provider: 'elevenlabs',
-    tier: 'Standard',
-    tags: ['MALE', 'DEEP', 'RUSSIAN'],
-  },
-  {
-    id: '7EzWGsX10sAS4c9m9cPf',
-    name: 'Exalar',
-    gender: 'Male',
-    accent: 'Standard',
-    provider: 'elevenlabs',
-    tier: 'Premium',
-    tags: ['MALE', 'SMOOTH', 'PROFESSIONAL'],
-  },
-  {
-    id: 'EnjklPXGBMNldCJ7jqkE',
-    name: 'Plexus',
-    gender: 'Male',
-    accent: 'Standard',
-    provider: 'playht',
-    tier: 'Standard',
-    tags: ['MALE', 'NEUTRAL', 'CLEAR'],
-  },
-  {
-    id: 'UgBBYS2sOqTuMpoF3BR0',
-    name: 'Beryl-X',
-    gender: 'Female',
-    accent: 'Standard',
-    provider: 'elevenlabs',
-    tier: 'Premium',
-    tags: ['FEMALE', 'BRIGHT', 'FRIENDLY'],
+    tags: ['MALE', 'CLEAR', 'AMERICAN'],
   },
 ];
 
@@ -123,7 +115,7 @@ export default function Voices() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
-  const [selectedVoiceId, setSelectedVoiceId] = useState<string | null>('SF9uvIlY93SJRMdV5jeP');
+  const [selectedVoiceId, setSelectedVoiceId] = useState<string | null>('21m00Tcm4TlvDq8ikWAM');
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
   const [loadingVoiceId, setLoadingVoiceId] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
@@ -219,17 +211,13 @@ export default function Voices() {
     setLoadingVoiceId(voiceId);
 
     try {
-      const { data, error } = await supabase.functions.invoke('text-to-speech', {
-        body: {
-          text: 'Bună ziua! Aceasta este o demonstrație a vocii mele.',
-          voice_id: voiceId,
-        },
-      });
+      const data = await elevenLabsApi.textToSpeech(
+        'Bună ziua! Aceasta este o demonstrație a vocii mele.',
+        voiceId
+      );
 
-      if (error) throw error;
-
-      if (data?.audio_base64) {
-        const audioDataUrl = `data:audio/mpeg;base64,${data.audio_base64}`;
+      if (data?.audioContent) {
+        const audioDataUrl = `data:audio/mpeg;base64,${data.audioContent}`;
         const audio = new Audio(audioDataUrl);
         audio.onended = () => setPlayingVoiceId(null);
         audio.onerror = () => {
@@ -243,7 +231,6 @@ export default function Voices() {
         toast.info('Previzualizare indisponibilă');
       }
     } catch (error) {
-      console.error('Error playing preview:', error);
       toast.error('Eroare la redarea previzualizării');
     } finally {
       setLoadingVoiceId(null);
